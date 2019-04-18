@@ -14,8 +14,11 @@ import { QuestComponent } from './quest/quest.component';
 import { SocialLoginComponent } from './social-login/social-login.component';
 
 import * as service from './service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 export const services: Provider[] = Object.values(service);
+services.push([AngularFirestore, AngularFireAuth]);
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from '../service';
+import { LocalStorageService, CloudStorageService } from '../service';
 import { Data } from '../interface/quest';
 
 @Component({
@@ -11,7 +11,10 @@ export class QuestComponent implements OnInit {
 
   public data: Data;
 
-  constructor(private localStorageService: LocalStorageService) { }
+  constructor(
+    private localStorageService: LocalStorageService,
+    private cloudStorageService: CloudStorageService,
+  ) { }
 
   ngOnInit() {
     this.data = this.localStorageService.load();
@@ -21,6 +24,15 @@ export class QuestComponent implements OnInit {
     }
 
     console.log(this.data);
+  }
+
+  saveToCloud() {
+    this.cloudStorageService.save(this.data);
+  }
+
+  loadFromCloud() {
+    console.log('load');
+    this.cloudStorageService.load();
   }
 
 }

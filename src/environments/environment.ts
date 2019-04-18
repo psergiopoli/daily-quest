@@ -12,7 +12,8 @@ export const environment = {
     projectId: 'dailyquest-1b56f',
     storageBucket: 'dailyquest-1b56f.appspot.com',
     messagingSenderId: '976252896492'
-  }
+  },
+  firebaseDataCollection: 'user_data'
 };
 
 /*

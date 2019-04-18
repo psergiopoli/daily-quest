@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, FacebookLoginProvider, GoogleLoginProvider, LinkedInLoginProvider, SocialUser } from 'angularx-social-login';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth, User } from 'firebase/app';
 
 @Component({
   selector: 'app-social-login',
@@ -9,12 +10,14 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider, LinkedInLoginP
 export class SocialLoginComponent implements OnInit {
 
   alreadyLogged = false;
-  user: SocialUser;
+  user: User;
 
-  constructor(private socialAuthService: AuthService) {}
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+  ) {}
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user: SocialUser) => {
+    this.angularFireAuth.authState.subscribe((user: User) => {
       if (user) {
         this.alreadyLogged = true;
         this.user = user;
@@ -27,25 +30,14 @@ export class SocialLoginComponent implements OnInit {
   public socialSignIn(socialPlatform: string) {
     let socialPlatformProvider;
     if (socialPlatform === 'facebook') {
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-    } else if (socialPlatform === 'google') {
-      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-    } else if (socialPlatform === 'linkedin') {
-      socialPlatformProvider = LinkedInLoginProvider.PROVIDER_ID;
+      socialPlatformProvider = new auth.FacebookAuthProvider();
     }
 
-    this.socialAuthService.signIn(socialPlatformProvider).then(
-      (userData) => {
-        console.log(socialPlatform + ' sign in data : ' , userData);
-        // Now sign-in with userData
-        // ...
-
-      }
-    );
+    this.angularFireAuth.auth.signInWithPopup(socialPlatformProvider);
   }
 
   public socialLogout() {
-    this.socialAuthService.signOut().then((a) => {
+    this.angularFireAuth.auth.signOut().then(() => {
       this.alreadyLogged = false;
       this.user = null;
     });

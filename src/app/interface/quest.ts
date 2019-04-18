@@ -2,6 +2,9 @@ export type QuestType = 'Yearly' | 'Monthly' | 'Weekly' | 'Daily';
 export type RewardLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export class Data {
+    uid = null;
+    email = null;
+    providerData = null;
     config: Config = {
         pointsType: '$',
     };
