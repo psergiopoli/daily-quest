@@ -39,12 +39,12 @@ export class CloudStorageService {
 
   save(data: Data): Promise<any> {
     const promise: Promise<Data> = new Promise((res, rej) => {
-      const dataToPersist = Object.assign({}, data);
       this.angularFireAuth.authState.subscribe((user: User) => {
         if (user) {
-          dataToPersist.uid = user.uid;
-          dataToPersist.email = user.email;
-          dataToPersist.providerData = user.providerData;
+          data.uid = user.uid;
+          data.email = user.email;
+          data.providerData = user.providerData;
+          const dataToPersist = JSON.parse(JSON.stringify(data)); // Object to save on Firebase need to be a pure javascript object
           this.firestore.collection(environment.firebaseDataCollection).doc(user.uid).set(dataToPersist);
           res();
         } else {
