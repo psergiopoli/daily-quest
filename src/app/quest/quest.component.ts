@@ -22,8 +22,6 @@ export class QuestComponent implements OnInit {
       this.data = new Data();
       this.localStorageService.save(this.data);
     }
-
-    console.log(this.data);
   }
 
   saveToCloud() {
@@ -36,8 +34,8 @@ export class QuestComponent implements OnInit {
 
   loadFromCloud() {
     this.cloudStorageService.load().then(data => {
-      console.log(data);
       this.data = data;
+      this.localStorageService.save(data);
     }).catch(err => {
       console.log(err);
     });

@@ -27,7 +27,7 @@ export class CloudStorageService {
             } else {
               rej('No data found');
             }
-          });
+          }, err => rej(err));
         } else {
           rej('User not Logged in');
         }
