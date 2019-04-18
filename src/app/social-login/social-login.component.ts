@@ -9,6 +9,7 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider, LinkedInLoginP
 export class SocialLoginComponent implements OnInit {
 
   alreadyLogged = false;
+  user: SocialUser;
 
   constructor(private socialAuthService: AuthService) {}
 
@@ -16,6 +17,7 @@ export class SocialLoginComponent implements OnInit {
     this.socialAuthService.authState.subscribe((user: SocialUser) => {
       if (user) {
         this.alreadyLogged = true;
+        this.user = user;
       } else {
         this.alreadyLogged = false;
       }
@@ -45,6 +47,7 @@ export class SocialLoginComponent implements OnInit {
   public socialLogout() {
     this.socialAuthService.signOut().then((a) => {
       this.alreadyLogged = false;
+      this.user = null;
     });
   }
 
