@@ -27,12 +27,20 @@ export class QuestComponent implements OnInit {
   }
 
   saveToCloud() {
-    this.cloudStorageService.save(this.data);
+    this.cloudStorageService.save(this.data).then(() => {
+      console.log('Data save with success');
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   loadFromCloud() {
-    console.log('load');
-    this.cloudStorageService.load();
+    this.cloudStorageService.load().then(data => {
+      console.log(data);
+      this.data = data;
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
 }

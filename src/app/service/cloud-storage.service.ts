@@ -17,30 +17,42 @@ export class CloudStorageService {
   ) { }
 
 
-  load() {
-    this.angularFireAuth.authState.subscribe((user: User) => {
-      if (user) {
-        console.log(`${environment.firebaseDataCollection}/${user.uid}`);
-        this.firestore.doc(`${environment.firebaseDataCollection}/${user.uid}`).get().subscribe(retorno => {
-          console.log(retorno);
-        });
-      } else {
-        console.log('User not Logged in');
-      }
+  load(): Promise<Data> {
+    const promise: Promise<Data> = new Promise((res, rej) => {
+      this.angularFireAuth.authState.subscribe((user: User) => {
+        if (user) {
+          this.firestore.doc(`${environment.firebaseDataCollection}/${user.uid}`).get().subscribe(userData => {
+            if (userData.exists) {
+              res(userData.data() as Data);
+            } else {
+              rej('No data found');
+            }
+          });
+        } else {
+          rej('User not Logged in');
+        }
+      }, err => rej(err));
     });
+
+    return promise;
   }
 
-  save(data: Data) {
-    const dataToPersist = Object.assign({}, data);
-    this.angularFireAuth.authState.subscribe((user: User) => {
-      if (user) {
-        dataToPersist.uid = user.uid;
-        dataToPersist.email = user.email;
-        dataToPersist.providerData = user.providerData;
-        this.firestore.collection(environment.firebaseDataCollection).doc(user.uid).set(dataToPersist);
-      } else {
-        console.log('User not Logged in');
-      }
+  save(data: Data): Promise<any> {
+    const promise: Promise<Data> = new Promise((res, rej) => {
+      const dataToPersist = Object.assign({}, data);
+      this.angularFireAuth.authState.subscribe((user: User) => {
+        if (user) {
+          dataToPersist.uid = user.uid;
+          dataToPersist.email = user.email;
+          dataToPersist.providerData = user.providerData;
+          this.firestore.collection(environment.firebaseDataCollection).doc(user.uid).set(dataToPersist);
+          res();
+        } else {
+          rej('User not Logged in');
+        }
+      }, err => rej(err));
     });
+
+    return promise;
   }
 }
