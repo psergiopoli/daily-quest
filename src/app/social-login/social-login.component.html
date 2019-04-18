@@ -1,0 +1,7 @@
+<div *ngIf="!alreadyLogged;else logout">
+  <button (click)="socialSignIn('facebook')">Sign in with Facebook</button>
+</div>
+
+<ng-template #logout>
+  <button (click)="socialLogout()">Logout</button>
+</ng-template>
